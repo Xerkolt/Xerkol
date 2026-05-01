@@ -59,8 +59,10 @@ function Lib.Window(Title)
 	-- TopBar buttons
 	local MinimizeBtn = Instance.new("TextButton")
 	local MaximizeBtn = Instance.new("TextButton")
+	local CloseBtn = Instance.new("TextButton")
 	local BtnCorner = Instance.new("UICorner")
 	local BtnCorner2 = Instance.new("UICorner")
+	local BtnCorner3 = Instance.new("UICorner")
 
 	-- Properties
 	UiLib.Name = "UiLib"
@@ -160,20 +162,20 @@ function Lib.Window(Title)
 	LibraryTitle.Size = UDim2.new(0, 300, 0, 39)
 	LibraryTitle.ZIndex = 5
 	LibraryTitle.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.ExtraBold, Enum.FontStyle.Normal)
-	LibraryTitle.Text = Title -- Customizable
+	LibraryTitle.Text = Title
 	LibraryTitle.TextColor3 = Color3.fromRGB(227, 227, 227)
 	LibraryTitle.TextScaled = true
 	LibraryTitle.TextSize = 37.000
 	LibraryTitle.TextWrapped = true
 	LibraryTitle.TextXAlignment = Enum.TextXAlignment.Left
 
-	-- Minimize button
+	-- Minimize button ( - )
 	MinimizeBtn.Name = "MinimizeBtn"
 	MinimizeBtn.Parent = TopBar
 	MinimizeBtn.BackgroundColor3 = Color3.fromRGB(53, 50, 74)
 	MinimizeBtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	MinimizeBtn.BorderSizePixel = 0
-	MinimizeBtn.Position = UDim2.new(0.87, 0, 0.22, 0)
+	MinimizeBtn.Position = UDim2.new(1, -28, 0.22, 0)
 	MinimizeBtn.Size = UDim2.new(0, 24, 0, 24)
 	MinimizeBtn.ZIndex = 6
 	MinimizeBtn.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
@@ -183,13 +185,13 @@ function Lib.Window(Title)
 	BtnCorner.CornerRadius = UDim.new(0, 6)
 	BtnCorner.Parent = MinimizeBtn
 
-	-- Maximize button (initially hidden)
+	-- Maximize button ( + )
 	MaximizeBtn.Name = "MaximizeBtn"
 	MaximizeBtn.Parent = TopBar
 	MaximizeBtn.BackgroundColor3 = Color3.fromRGB(53, 50, 74)
 	MaximizeBtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	MaximizeBtn.BorderSizePixel = 0
-	MaximizeBtn.Position = UDim2.new(0.87, 0, 0.22, 0)
+	MaximizeBtn.Position = UDim2.new(1, -56, 0.22, 0)
 	MaximizeBtn.Size = UDim2.new(0, 24, 0, 24)
 	MaximizeBtn.ZIndex = 6
 	MaximizeBtn.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
@@ -199,6 +201,26 @@ function Lib.Window(Title)
 	MaximizeBtn.Visible = false
 	BtnCorner2.CornerRadius = UDim.new(0, 6)
 	BtnCorner2.Parent = MaximizeBtn
+
+	-- Close button ( × )
+	CloseBtn.Name = "CloseBtn"
+	CloseBtn.Parent = TopBar
+	CloseBtn.BackgroundColor3 = Color3.fromRGB(53, 50, 74)
+	CloseBtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	CloseBtn.BorderSizePixel = 0
+	CloseBtn.Position = UDim2.new(1, -84, 0.22, 0)
+	CloseBtn.Size = UDim2.new(0, 24, 0, 24)
+	CloseBtn.ZIndex = 6
+	CloseBtn.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+	CloseBtn.Text = "×"
+	CloseBtn.TextColor3 = Color3.fromRGB(227, 227, 227)
+	CloseBtn.TextSize = 20
+	BtnCorner3.CornerRadius = UDim.new(0, 6)
+	BtnCorner3.Parent = CloseBtn
+
+	CloseBtn.MouseButton1Click:Connect(function()
+		pcall(function() UiLib:Destroy() end)
+	end)
 
 	local minimized = false
 	local originalMainSize = Main.Size
@@ -435,7 +457,6 @@ function Lib.Window(Title)
 					size = (ButtonFrame.AbsoluteSize.Y * 1.5)
 				end
 				c:TweenSizeAndPosition(UDim2.new(0, size, 0, size), UDim2.new(0.5, (-size / 2), 0.5, (-size / 2)), 'Out', 'Quad', len, true, nil)
-				-- Smooth fade out via tween
 				tweenService:Create(c, TweenInfo.new(len, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 1}):Play()
 				game.Debris:AddItem(c, len + 0.1)
 			end)
@@ -687,7 +708,8 @@ function Lib.Window(Title)
 			local ms = game.Players.LocalPlayer:GetMouse()
 
 			ToggleTrigger.MouseButton1Click:Connect(function()
-				if toggled == false then
+				toggled = not toggled
+				if toggled then
 					tweenService:Create(img, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
 						ImageTransparency = 0
 					}):Play()
@@ -710,9 +732,7 @@ function Lib.Window(Title)
 					tweenService:Create(c, TweenInfo.new(len, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 1}):Play()
 					ClickSound:Play()
 					game.Debris:AddItem(c, len + 0.1)
-					wait(0.25)
-					toggled = true
-				elseif toggled == true then
+				else
 					tweenService:Create(img, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
 						ImageTransparency = 1
 					}):Play()
@@ -735,8 +755,6 @@ function Lib.Window(Title)
 					tweenService:Create(c, TweenInfo.new(len, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 1}):Play()
 					ClickSound:Play()
 					game.Debris:AddItem(c, len + 0.1)
-					wait(0.25)
-					toggled = false
 				end
 				pcall(callback, toggled)
 			end)
