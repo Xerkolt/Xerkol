@@ -448,153 +448,183 @@ function Lib.Window(Title, iconImage)
 			end)
 		end
 
-		function Content.CreateSlider(SliderTitle, minvalue, maxvalue, callback)
-			SliderTitle = SliderTitle or "Slider"
-			minvalue = minvalue or 16
-			maxvalue = maxvalue or 100
-			callback = callback or function() end
+		function Content.CreateSlider(SliderTitle, minvalue, maxvalue, callback, defaultVal)
+	SliderTitle = SliderTitle or "Slider"
+	minvalue = minvalue or 0
+	maxvalue = maxvalue or 100
+	callback = callback or function() end
+	defaultVal = defaultVal or minvalue
 
-			local SliderFrame = Instance.new("Frame")
-			local SliderCorner = Instance.new("UICorner")
-			local SliderLabel = Instance.new("TextLabel")
-			local GraphImage = Instance.new("ImageLabel")
-			local SliderTrigger = Instance.new("TextButton")
-			local SliderBack = Instance.new("Frame")
-			local SliderFill = Instance.new("Frame")
-			local UICorner_2 = Instance.new("UICorner")
-			local UICorner_3 = Instance.new("UICorner")
-			local ValueLabel = Instance.new("TextLabel")
+	local SliderFrame = Instance.new("Frame")
+	local SliderCorner = Instance.new("UICorner")
+	local SliderLabel = Instance.new("TextLabel")
+	local GraphImage = Instance.new("ImageLabel")
+	local SliderTrigger = Instance.new("TextButton")
+	local SliderBack = Instance.new("Frame")
+	local SliderFill = Instance.new("Frame")
+	local UICorner_2 = Instance.new("UICorner")
+	local UICorner_3 = Instance.new("UICorner")
+	local ValueLabel = Instance.new("TextLabel")
 
-			SliderFrame.Name = "SliderFrame"
-			SliderFrame.Parent = TabContent
-			SliderFrame.Active = true
-			SliderFrame.BackgroundColor3 = Color3.fromRGB(53, 50, 74)
-			SliderFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-			SliderFrame.BorderSizePixel = 0
-			SliderFrame.ClipsDescendants = true
-			SliderFrame.Size = UDim2.new(0, 237, 0, 48)
-			SliderFrame.ZIndex = 4
+	SliderFrame.Name = "SliderFrame"
+	SliderFrame.Parent = TabContent
+	SliderFrame.Active = true
+	SliderFrame.BackgroundColor3 = Color3.fromRGB(53, 50, 74)
+	SliderFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	SliderFrame.BorderSizePixel = 0
+	SliderFrame.ClipsDescendants = true
+	SliderFrame.Size = UDim2.new(0, 237, 0, 48)
+	SliderFrame.ZIndex = 4
 
-			SliderCorner.Name = "SliderCorner"
-			SliderCorner.Parent = SliderFrame
+	SliderCorner.Name = "SliderCorner"
+	SliderCorner.Parent = SliderFrame
 
-			SliderLabel.Name = "SliderLabel"
-			SliderLabel.Parent = SliderFrame
-			SliderLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-			SliderLabel.BackgroundTransparency = 1.000
-			SliderLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-			SliderLabel.BorderSizePixel = 0
-			SliderLabel.Position = UDim2.new(0.185654014, 0, 0, 0)
-			SliderLabel.Size = UDim2.new(0, 193, 0, 32)
-			SliderLabel.ZIndex = 5
-			SliderLabel.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
-			SliderLabel.Text = SliderTitle
-			SliderLabel.TextColor3 = Color3.fromRGB(227, 227, 227)
-			SliderLabel.TextSize = 26.000
-			SliderLabel.TextWrapped = true
-			SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+	SliderLabel.Name = "SliderLabel"
+	SliderLabel.Parent = SliderFrame
+	SliderLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	SliderLabel.BackgroundTransparency = 1.000
+	SliderLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	SliderLabel.BorderSizePixel = 0
+	SliderLabel.Position = UDim2.new(0.185654014, 0, 0, 0)
+	SliderLabel.Size = UDim2.new(0, 193, 0, 32)
+	SliderLabel.ZIndex = 5
+	SliderLabel.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+	SliderLabel.Text = SliderTitle
+	SliderLabel.TextColor3 = Color3.fromRGB(227, 227, 227)
+	SliderLabel.TextSize = 26.000
+	SliderLabel.TextWrapped = true
+	SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-			GraphImage.Name = "GraphImage"
-			GraphImage.Parent = SliderFrame
-			GraphImage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-			GraphImage.BackgroundTransparency = 1.000
-			GraphImage.BorderColor3 = Color3.fromRGB(0, 0, 0)
-			GraphImage.BorderSizePixel = 0
-			GraphImage.Position = UDim2.new(0.0801687762, -5, 0.1875, -2)
-			GraphImage.Size = UDim2.new(0, 22, 0, 22)
-			GraphImage.ZIndex = 5
-			GraphImage.Image = "rbxassetid://3926307971"
-			GraphImage.ImageColor3 = Color3.fromRGB(228, 197, 255)
-			GraphImage.ImageRectOffset = Vector2.new(404, 164)
-			GraphImage.ImageRectSize = Vector2.new(36, 36)
+	GraphImage.Name = "GraphImage"
+	GraphImage.Parent = SliderFrame
+	GraphImage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	GraphImage.BackgroundTransparency = 1.000
+	GraphImage.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	GraphImage.BorderSizePixel = 0
+	GraphImage.Position = UDim2.new(0.0801687762, -5, 0.1875, -2)
+	GraphImage.Size = UDim2.new(0, 22, 0, 22)
+	GraphImage.ZIndex = 5
+	GraphImage.Image = "rbxassetid://3926307971"
+	GraphImage.ImageColor3 = Color3.fromRGB(228, 197, 255)
+	GraphImage.ImageRectOffset = Vector2.new(404, 164)
+	GraphImage.ImageRectSize = Vector2.new(36, 36)
 
-			SliderTrigger.Name = "SliderTrigger"
-			SliderTrigger.Parent = SliderFrame
-			SliderTrigger.BackgroundColor3 = Color3.fromRGB(53, 50, 74)
-			SliderTrigger.BackgroundTransparency = 1.000
-			SliderTrigger.BorderColor3 = Color3.fromRGB(0, 0, 0)
-			SliderTrigger.BorderSizePixel = 0
-			SliderTrigger.ClipsDescendants = true
-			SliderTrigger.Position = UDim2.new(0.0680000037, 0, 0.708000004, 0)
-			SliderTrigger.Size = UDim2.new(0, 207, 0, 7)
-			SliderTrigger.ZIndex = 5
-			SliderTrigger.Text = ""
-			SliderTrigger.TextTransparency = 1.000
+	SliderTrigger.Name = "SliderTrigger"
+	SliderTrigger.Parent = SliderFrame
+	SliderTrigger.BackgroundColor3 = Color3.fromRGB(53, 50, 74)
+	SliderTrigger.BackgroundTransparency = 1.000
+	SliderTrigger.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	SliderTrigger.BorderSizePixel = 0
+	SliderTrigger.ClipsDescendants = true
+	SliderTrigger.Position = UDim2.new(0.0680000037, 0, 0.708000004, 0)
+	SliderTrigger.Size = UDim2.new(0, 207, 0, 7)
+	SliderTrigger.ZIndex = 5
+	SliderTrigger.Text = ""
+	SliderTrigger.TextTransparency = 1.000
 
-			SliderBack.Name = "SliderBack"
-			SliderBack.Parent = SliderTrigger
-			SliderBack.BackgroundColor3 = Color3.fromRGB(53, 40, 65)
-			SliderBack.BorderColor3 = Color3.fromRGB(0, 0, 0)
-			SliderBack.BorderSizePixel = 0
-			SliderBack.Size = UDim2.new(0, 207, 0, 7)
-			SliderBack.ZIndex = 5
-			SliderBack.ClipsDescendants = true
+	SliderBack.Name = "SliderBack"
+	SliderBack.Parent = SliderTrigger
+	SliderBack.BackgroundColor3 = Color3.fromRGB(53, 40, 65)
+	SliderBack.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	SliderBack.BorderSizePixel = 0
+	SliderBack.Size = UDim2.new(0, 207, 0, 7)
+	SliderBack.ZIndex = 5
+	SliderBack.ClipsDescendants = true
 
-			SliderFill.Name = "SliderFill"
-			SliderFill.Parent = SliderBack
-			SliderFill.BackgroundColor3 = Color3.fromRGB(228, 197, 255)
-			SliderFill.BorderColor3 = Color3.fromRGB(0, 0, 0)
-			SliderFill.BorderSizePixel = 0
-			SliderFill.Size = UDim2.new(0, 0, 0, 7)
-			SliderFill.ZIndex = 5
+	SliderFill.Name = "SliderFill"
+	SliderFill.Parent = SliderBack
+	SliderFill.BackgroundColor3 = Color3.fromRGB(228, 197, 255)
+	SliderFill.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	SliderFill.BorderSizePixel = 0
+	SliderFill.Size = UDim2.new(0, 0, 0, 7)
+	SliderFill.ZIndex = 5
 
-			UICorner_2.Parent = SliderFill
-			UICorner_3.Parent = SliderBack
+	UICorner_2.Parent = SliderFill
+	UICorner_3.Parent = SliderBack
 
-			ValueLabel.Name = "ValueLabel"
-			ValueLabel.Parent = SliderFrame
-			ValueLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-			ValueLabel.BackgroundTransparency = 1.000
-			ValueLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-			ValueLabel.BorderSizePixel = 0
-			ValueLabel.Position = UDim2.new(0.628692031, 0, 0.0416666679, -1)
-			ValueLabel.Size = UDim2.new(0, 88, 0, 32)
-			ValueLabel.ZIndex = 5
-			ValueLabel.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
-			ValueLabel.Text = minvalue
-			ValueLabel.TextColor3 = Color3.fromRGB(227, 227, 227)
-			ValueLabel.TextSize = 26.000
-			ValueLabel.TextWrapped = true
-			ValueLabel.TextTransparency = 1.000
+	ValueLabel.Name = "ValueLabel"
+	ValueLabel.Parent = SliderFrame
+	ValueLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ValueLabel.BackgroundTransparency = 1.000
+	ValueLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ValueLabel.BorderSizePixel = 0
+	ValueLabel.Position = UDim2.new(0.628692031, 0, 0.0416666679, -1)
+	ValueLabel.Size = UDim2.new(0, 88, 0, 32)
+	ValueLabel.ZIndex = 5
+	ValueLabel.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+	ValueLabel.Text = tostring(defaultVal)
+	ValueLabel.TextColor3 = Color3.fromRGB(227, 227, 227)
+	ValueLabel.TextSize = 26.000
+	ValueLabel.TextWrapped = true
+	ValueLabel.TextTransparency = 1.000
 
-			local mouse = game.Players.LocalPlayer:GetMouse()
-			local uis = game:GetService("UserInputService")
-			local Value;
+	local uis = game:GetService("UserInputService")
+	local barAbsoluteSize = SliderBack.AbsoluteSize.X
 
-			SliderTrigger.MouseButton1Down:Connect(function()
-				tweenService:Create(ValueLabel, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-					TextTransparency = 0
-				}):Play()
-				Value = math.floor((((tonumber(maxvalue) - tonumber(minvalue)) / 206) * SliderFill.AbsoluteSize.X) + tonumber(minvalue)) or 0
-				pcall(function()
-					callback(Value)
-				end)
-				SliderFill:TweenSize(UDim2.new(0, math.clamp(mouse.X - SliderFill.AbsolutePosition.X, 0, 206), 0, 7), "InOut", "Linear", 0.15, true)
-				moveconnection = mouse.Move:Connect(function()
-					ValueLabel.Text = Value
-					Value = math.floor((((tonumber(maxvalue) - tonumber(minvalue)) / 206) * SliderFill.AbsoluteSize.X) + tonumber(minvalue))
-					pcall(function()
-						callback(Value)
-					end)
-					SliderFill:TweenSize(UDim2.new(0, math.clamp(mouse.X - SliderFill.AbsolutePosition.X, 0, 206), 0, 7), "InOut", "Linear", 0.15, true)
-				end)
-				releaseconnection = uis.InputEnded:Connect(function(Mouse)
-					if Mouse.UserInputType == Enum.UserInputType.MouseButton1 then
-						Value = math.floor((((tonumber(maxvalue) - tonumber(minvalue)) / 206) * SliderFill.AbsoluteSize.X) + tonumber(minvalue))
-						pcall(function()
-							callback(Value)
-						end)
-						ValueLabel.Text = Value
-						tweenService:Create(ValueLabel, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-							TextTransparency = 1
-						}):Play()
-						SliderFill:TweenSize(UDim2.new(0, math.clamp(mouse.X - SliderFill.AbsolutePosition.X, 0, 206), 0, 7), "InOut", "Linear", 0.15, true)
-						moveconnection:Disconnect()
-						releaseconnection:Disconnect()
-					end
-				end)
+	local function setValueFromX(absoluteX)
+		local relX = math.clamp(absoluteX - SliderBack.AbsolutePosition.X, 0, barAbsoluteSize)
+		local percent = relX / barAbsoluteSize
+		local val = math.floor(minvalue + (maxvalue - minvalue) * percent)
+		SliderFill:TweenSize(UDim2.new(0, relX, 0, 7), "InOut", "Linear", 0.1, true)
+		ValueLabel.Text = tostring(val)
+		pcall(function() callback(val) end)
+		return val
+	end
+
+	-- Estado visual inicial por defecto
+	local defaultRelX = (defaultVal - minvalue) / (maxvalue - minvalue) * barAbsoluteSize
+	SliderFill.Size = UDim2.new(0, defaultRelX, 0, 7)
+	ValueLabel.Text = tostring(defaultVal)
+
+	local dragging = false
+	local moveConnection, releaseConnection
+	local activeInputObject = nil
+
+	local function startDrag()
+		dragging = true
+		tweenService:Create(ValueLabel, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+			TextTransparency = 0
+		}):Play()
+	end
+
+	local function stopDrag()
+		if not dragging then return end
+		dragging = false
+		activeInputObject = nil
+		tweenService:Create(ValueLabel, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+			TextTransparency = 1
+		}):Play()
+		if moveConnection then moveConnection:Disconnect() end
+		if releaseConnection then releaseConnection:Disconnect() end
+	end
+
+	SliderTrigger.InputBegan:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+			startDrag()
+			activeInputObject = input
+			setValueFromX(input.Position.X)
+
+			-- Movimiento (funciona con ratón y con dedos)
+			moveConnection = uis.InputChanged:Connect(function(moveInput)
+				if not dragging then return end
+				-- Solo seguimos si el movimiento pertenece al mismo input (ratón o dedo)
+				if moveInput.UserInputType == Enum.UserInputType.MouseMovement or moveInput.UserInputType == Enum.UserInputType.Touch then
+					-- En tablet, el input.Position puede no estar disponible en el evento InputChanged,
+					-- por eso usamos el objeto de UIS para obtener la posición del touch.
+					local pos = uis:GetMouseLocation()
+					setValueFromX(pos.X)
+				end
+			end)
+
+			-- Finalización
+			releaseConnection = uis.InputEnded:Connect(function(endInput)
+				if endInput == activeInputObject then
+					stopDrag()
+				end
 			end)
 		end
+	end)
+end
 
 		function Content.CreateToggle(TogTXT, callback)
 			TogTXT = TogTXT or "Toggle"
