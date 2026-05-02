@@ -39,7 +39,7 @@ function Lib:Drag(frame, parent)
 	end)
 end
 
-function Lib.Window(Title)
+function Lib.Window(Title, iconImage)
 	Title = Title or "Ui Library"
 	local UiLib = Instance.new("ScreenGui")
 	local Main = Instance.new("Frame")
@@ -56,12 +56,8 @@ function Lib.Window(Title)
 	local ExtensionCorner = Instance.new("UICorner")
 	local ContentHolder = Instance.new("Folder")
 
-	-- TopBar buttons
-	local MinimizeBtn = Instance.new("TextButton")
-	local MaximizeBtn = Instance.new("TextButton")
+	-- TopBar buttons (only ×)
 	local CloseBtn = Instance.new("TextButton")
-	local BtnCorner = Instance.new("UICorner")
-	local BtnCorner2 = Instance.new("UICorner")
 	local BtnCorner3 = Instance.new("UICorner")
 
 	-- Properties
@@ -169,46 +165,13 @@ function Lib.Window(Title)
 	LibraryTitle.TextWrapped = true
 	LibraryTitle.TextXAlignment = Enum.TextXAlignment.Left
 
-	-- Minimize button ( - )
-	MinimizeBtn.Name = "MinimizeBtn"
-	MinimizeBtn.Parent = TopBar
-	MinimizeBtn.BackgroundColor3 = Color3.fromRGB(53, 50, 74)
-	MinimizeBtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	MinimizeBtn.BorderSizePixel = 0
-	MinimizeBtn.Position = UDim2.new(1, -28, 0.22, 0)
-	MinimizeBtn.Size = UDim2.new(0, 24, 0, 24)
-	MinimizeBtn.ZIndex = 6
-	MinimizeBtn.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
-	MinimizeBtn.Text = "-"
-	MinimizeBtn.TextColor3 = Color3.fromRGB(227, 227, 227)
-	MinimizeBtn.TextSize = 20
-	BtnCorner.CornerRadius = UDim.new(0, 6)
-	BtnCorner.Parent = MinimizeBtn
-
-	-- Maximize button ( + )
-	MaximizeBtn.Name = "MaximizeBtn"
-	MaximizeBtn.Parent = TopBar
-	MaximizeBtn.BackgroundColor3 = Color3.fromRGB(53, 50, 74)
-	MaximizeBtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	MaximizeBtn.BorderSizePixel = 0
-	MaximizeBtn.Position = UDim2.new(1, -56, 0.22, 0)
-	MaximizeBtn.Size = UDim2.new(0, 24, 0, 24)
-	MaximizeBtn.ZIndex = 6
-	MaximizeBtn.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
-	MaximizeBtn.Text = "+"
-	MaximizeBtn.TextColor3 = Color3.fromRGB(227, 227, 227)
-	MaximizeBtn.TextSize = 20
-	MaximizeBtn.Visible = false
-	BtnCorner2.CornerRadius = UDim.new(0, 6)
-	BtnCorner2.Parent = MaximizeBtn
-
-	-- Close button ( × )
+	-- Close button ( × ) – minimiza a la bandeja
 	CloseBtn.Name = "CloseBtn"
 	CloseBtn.Parent = TopBar
 	CloseBtn.BackgroundColor3 = Color3.fromRGB(53, 50, 74)
 	CloseBtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	CloseBtn.BorderSizePixel = 0
-	CloseBtn.Position = UDim2.new(1, -84, 0.22, 0)
+	CloseBtn.Position = UDim2.new(1, -30, 0.22, 0)
 	CloseBtn.Size = UDim2.new(0, 24, 0, 24)
 	CloseBtn.ZIndex = 6
 	CloseBtn.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
@@ -218,44 +181,67 @@ function Lib.Window(Title)
 	BtnCorner3.CornerRadius = UDim.new(0, 6)
 	BtnCorner3.Parent = CloseBtn
 
-	CloseBtn.MouseButton1Click:Connect(function()
-		pcall(function() UiLib:Destroy() end)
-	end)
-
 	local minimized = false
+	local trayIcon = nil
 	local originalMainSize = Main.Size
+
+	local function showTrayIcon()
+		if trayIcon then trayIcon:Destroy() end
+		trayIcon = Instance.new("TextButton")
+		trayIcon.Size = UDim2.new(0, 48, 0, 48)
+		trayIcon.Position = UDim2.new(1, -60, 0, 30)
+		trayIcon.BackgroundColor3 = Color3.fromRGB(31, 25, 44)
+		trayIcon.BorderSizePixel = 0
+		trayIcon.Text = ""
+		trayIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
+		trayIcon.FontFace = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+		trayIcon.TextSize = 24
+		local corner = Instance.new("UICorner", trayIcon)
+		corner.CornerRadius = UDim.new(1, 0)
+		trayIcon.Parent = UiLib
+		trayIcon.ZIndex = 10
+
+		if iconImage then
+			local img = Instance.new("ImageLabel", trayIcon)
+			img.BackgroundTransparency = 1
+			img.Size = UDim2.new(1, -8, 1, -8)
+			img.Position = UDim2.new(0, 4, 0, 4)
+			img.Image = iconImage
+			img.ScaleType = Enum.ScaleType.Fit
+		else
+			trayIcon.Text = string.sub(Title, 1, 1):upper()
+		end
+
+		trayIcon.MouseButton1Click:Connect(function()
+			trayIcon:Destroy()
+			trayIcon = nil
+			setMinimized(false)
+		end)
+	end
 
 	local function setMinimized(state)
 		if state then
 			minimized = true
 			Main.Size = UDim2.new(originalMainSize.X.Scale, originalMainSize.X.Offset, 0, TopBar.AbsoluteSize.Y)
+			Main.ClipsDescendants = true
 			TabFrame.Visible = false
 			ContentHolder.Visible = false
-			for _, child in pairs(Main:GetChildren()) do
-				if child ~= TopBar and child ~= MainCorner then
-					child.Visible = false
-				end
-			end
-			MinimizeBtn.Visible = false
-			MaximizeBtn.Visible = true
+			showTrayIcon()
 		else
 			minimized = false
 			Main.Size = originalMainSize
+			Main.ClipsDescendants = false
 			TabFrame.Visible = true
 			ContentHolder.Visible = true
-			for _, child in pairs(Main:GetChildren()) do
-				child.Visible = true
+			if trayIcon then
+				trayIcon:Destroy()
+				trayIcon = nil
 			end
-			MinimizeBtn.Visible = true
-			MaximizeBtn.Visible = false
 		end
 	end
 
-	MinimizeBtn.MouseButton1Click:Connect(function()
-		setMinimized(true)
-	end)
-	MaximizeBtn.MouseButton1Click:Connect(function()
-		setMinimized(false)
+	CloseBtn.MouseButton1Click:Connect(function()
+		setMinimized(not minimized)
 	end)
 
 	Extension.Name = "Extension"
