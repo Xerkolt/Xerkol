@@ -9,6 +9,7 @@ function Lib:Drag(frame, parent)
 	local dragSpeed = 0.25
 	local dragStart = nil
 	local startPos = nil
+	local activeInput = nil  -- Guardamos el dedo que inició el arrastre
 
 	local function updateInput(input)
 		local delta = input.Position - dragStart
@@ -20,19 +21,27 @@ function Lib:Drag(frame, parent)
 	frame.InputBegan:Connect(function(input)
 		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
 			dragToggle = true
+			activeInput = input   -- recordamos el objeto que inició
 			dragStart = input.Position
 			startPos = parent.Position
 			input.Changed:Connect(function()
 				if input.UserInputState == Enum.UserInputState.End then
 					dragToggle = false
+					activeInput = nil
 				end
 			end)
 		end
 	end)
 
 	UIS.InputChanged:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		if input.UserInputType == Enum.UserInputType.MouseMovement then
+			-- ratón: se sigue usando el mismo movimiento (no hay problema de multi-toque)
 			if dragToggle then
+				updateInput(input)
+			end
+		elseif input.UserInputType == Enum.UserInputType.Touch then
+			-- Solo seguimos si el toque es el mismo que comenzó el arrastre
+			if dragToggle and input == activeInput then
 				updateInput(input)
 			end
 		end
