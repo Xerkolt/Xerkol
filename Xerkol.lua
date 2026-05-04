@@ -71,7 +71,7 @@ function Lib.Window(Title, iconImage)
 
 	-- Properties
 	UiLib.Name = "UiLib"
-	UiLib.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+	UiLib.Parent = game:GetService("CoreGui")
 	UiLib.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 	Main.Name = "Main"
